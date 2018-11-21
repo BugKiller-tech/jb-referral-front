@@ -17,8 +17,8 @@ class SignIn extends React.Component {
     constructor() {
         super();
         this.state = {
-            email: '',
-            password: ''
+            email: 'test@gmail.com',
+            password: '111111'
         }
     }
 
@@ -43,7 +43,6 @@ class SignIn extends React.Component {
             <div
                 className="app-login-container d-flex justify-content-center align-items-center animated slideInUpTiny animation-duration-3">
                 <div className="app-login-main-content">
-
                     <div className="app-logo-content d-flex align-items-center justify-content-center">
                         <Link className="logo-lg" to="/" title="Jambo">
                             <img src="http://via.placeholder.com/177x65" alt="jambo" title="jambo"/>
@@ -78,6 +77,14 @@ class SignIn extends React.Component {
 
                                     <div className="mb-3 d-flex align-items-center justify-content-between">
                                         <Button onClick={() => {
+                                            if (this.state.email == '') {
+                                                NotificationManager.error('The email can not be blank');
+                                                return;
+                                            }
+                                            if (this.state.password == '') {
+                                                NotificationManager.error('The pasword can not be blank');
+                                                return;
+                                            }
                                             this.props.showAuthLoader();
                                             this.props.userSignIn({email, password});
                                         }} variant="raised" color="primary">
@@ -88,54 +95,6 @@ class SignIn extends React.Component {
                                             <IntlMessages id="signIn.signUp"/>
                                         </Link>
                                     </div>
-
-                                    {/* <div className="app-social-block my-1 my-sm-3">
-                                        <IntlMessages
-                                            id="signIn.connectWith"/>
-                                        <ul className="social-link">
-                                            <li>
-                                                <IconButton className="icon"
-                                                            onClick={() => {
-                                                                this.props.showAuthLoader();
-                                                                this.props.userFacebookSignIn();
-                                                            }}>
-                                                    <i className="zmdi zmdi-facebook"/>
-                                                </IconButton>
-                                            </li>
-
-                                            <li>
-                                                <IconButton className="icon"
-                                                            onClick={() => {
-                                                                this.props.showAuthLoader();
-                                                                this.props.userTwitterSignIn();
-                                                            }}>
-                                                    <i className="zmdi zmdi-twitter"/>
-                                                </IconButton>
-                                            </li>
-
-                                            <li>
-                                                <IconButton className="icon"
-                                                            onClick={() => {
-                                                                this.props.showAuthLoader();
-                                                                this.props.userGoogleSignIn();
-
-                                                            }}>
-                                                    <i className="zmdi zmdi-google-plus"/>
-                                                </IconButton>
-                                            </li>
-
-                                            <li>
-                                                <IconButton className="icon"
-                                                            onClick={() => {
-                                                                this.props.showAuthLoader();
-                                                                this.props.userGithubSignIn();
-                                                            }}>
-                                                    <i className="zmdi zmdi-github"/>
-                                                </IconButton>
-                                            </li>
-                                        </ul>
-                                    </div> */}
-
                                 </fieldset>
                             </form>
                         </div>

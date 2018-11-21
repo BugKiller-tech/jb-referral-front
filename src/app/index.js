@@ -20,6 +20,8 @@ import TopNav from 'components/TopNav';
 import Profile from './routes/profile';
 import Companies from './routes/companies';
 
+import { NotificationContainer } from 'react-notifications';
+
 class App extends React.Component {
 
     render() {
@@ -71,6 +73,7 @@ class App extends React.Component {
                         <Footer/>
                     </main>
                 </div>
+                <NotificationContainer />
             </div>
         );
     }

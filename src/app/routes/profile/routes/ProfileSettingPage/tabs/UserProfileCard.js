@@ -1,11 +1,11 @@
 import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import { Button } from '@material-ui/core';
+import { connect } from 'react-redux';
 
-const UserProfileCard = ({headerStyle}) => {
+const UserProfileCard = ({headerStyle, user}) => {
     return (
         <div className="jr-card text-center">
-
             <div className={`jr-card-header-color ${headerStyle}`}>
                 <div className="jr-card-header-top">
                 &nbsp;
@@ -19,17 +19,24 @@ const UserProfileCard = ({headerStyle}) => {
                      src="http://via.placeholder.com/150x150" alt="Team Member"/>
 
                 <div className="jr-card-hd-content text-white">
-                    <h4 className="mb-0">John Doe</h4>
-                    <p className="mb-0">john@gmail.com</p>
+                    <h4 className="mb-0">{ user.firstName } { user.lastName }</h4>
+                    <p className="mb-0">{ user.email }</p>
                 </div>
             </div>
             <div className="jr-card-body">
-                
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dicta nihil, reprehenderit incidunt debitis animi architecto! Quam aspernatur libero magni minima expedita? Deserunt error unde consequatur voluptatibus porro et cumque architecto? Nam ea voluptatem voluptatum repellendus numquam nulla ratione impedit odit, consequatur soluta nesciunt itaque, inventore quaerat explicabo distinctio laboriosam? Voluptatem!</p>
+                {/* <p>This is what I'm working on</p> */}
             </div>
         </div>
     )
 };
 
-export default UserProfileCard;
+const mapStateToProps = (state) => {
+    return {
+        user: state.auth.authUser
+    }
+}
+
+export default connect(
+    mapStateToProps,
+)(UserProfileCard);
 

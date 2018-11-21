@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 
 import ChangePassword from './tabs/ChangePassword';
 import UserProfileCard from './tabs/UserProfileCard';
+import SwitchAccount  from './tabs/SwitchAccount';
 
 function TabContainer({children, dir}) {
     return (
@@ -76,10 +77,10 @@ class FullWidthTabs extends Component {
                 >
                     <TabContainer dir={theme.direction}>
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="col-md-12">
                                 <UserProfileCard  headerStyle="bg-primary" />
                             </div>
-                            <div className="col-md-6 text-center">
+                            {/* <div className="col-md-6 text-center">
                                 <div>
                                     <Button
                                         className="jr-btn"
@@ -89,12 +90,12 @@ class FullWidthTabs extends Component {
                                     </Button>
 
                                 </div>                                
-                            </div>
+                            </div> */}
                         </div>
                         
                     </TabContainer>
                     <TabContainer dir={theme.direction}><ChangePassword /></TabContainer>
-                    <TabContainer dir={theme.direction}>More</TabContainer>
+                    <TabContainer dir={theme.direction}><SwitchAccount /></TabContainer>
                 </SwipeableViews>
             </div>
         );

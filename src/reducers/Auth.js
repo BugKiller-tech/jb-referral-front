@@ -10,7 +10,9 @@ import {
     // SIGNIN_TWITTER_USER_SUCCESS,
     SIGNIN_USER_SUCCESS,
     SIGNOUT_USER_SUCCESS,
-    SIGNUP_USER_SUCCESS
+    SIGNUP_USER_SUCCESS,
+
+    CHANGE_PASSWORD
 } from 'constants/ActionTypes';
 
 const INIT_STATE = {
@@ -18,7 +20,7 @@ const INIT_STATE = {
     alertMessage: '',
     showMessage: false,
     initURL: '',
-    authUser: localStorage.getItem('user_id'),
+    authUser: JSON.parse(localStorage.getItem('user')),
 };
 
 

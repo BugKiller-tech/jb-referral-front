@@ -6,16 +6,21 @@ const header = {
 const multipartHeader = {
   'Content-type': 'multipart/form-data'
 }
-const BASE_URL = 'http://35.235.91.149:5000';
+// const BASE_URL = 'http://localhost:8080/api';
+const BASE_URL = '/api';
 
 export default {
   // login and other common component
-  createUserWithEmailAndPassword: (data) => axios.post(`${BASE_URL}/signup`, data, header),
-  signInWithEmailAndPassword: (data) => axios.post(`${BASE_URL}/login`, data, header),
-  sendForgotPasswordEmail: (data) => axios.post(`${BASE_URL}/forgot_password`, data, header),
+  createUserAccount: (data) => axios.post(`${BASE_URL}/users/signup`, data),
+  signInWithEmailAndPassword: (data) => axios.post(`${BASE_URL}/users/signin`, data),
+  changePassword: (data) => axios.post(`${BASE_URL}/users/changePassword`, data),
+
+
+
+
+  sendForgotPasswordEmail: (data) => axios.post(`${BASE_URL}/forgot_password`, data),
   confirmEmail: (token) => axios.get(`${BASE_URL}/confirm/${token}`),
   getAccountInfo: () => axios.get(`${BASE_URL}/account_info`),
-  changePassword: (data) => axios.post(`${BASE_URL}/change_password`, data, header),
   signOut: () => axios.get(`${BASE_URL}/logout`),
 
 

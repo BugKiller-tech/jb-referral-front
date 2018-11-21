@@ -30,7 +30,7 @@ class WebpackDevConfig extends WebpackBaseConfig {
 
                 new webpack.NoEmitOnErrorsPlugin(),
                 new webpack.NamedModulesPlugin(),
-            ]
+            ],
         };
 
         this.config.module.rules = this.config.module.rules.concat([

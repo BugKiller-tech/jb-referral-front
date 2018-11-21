@@ -25,15 +25,15 @@ import {
 } from 'actions/Auth';
 
 
-const createUserWithEmailPasswordRequest = async (firstName, lastName, email, password) =>
-    await  Api.createUserWithEmailAndPassword({ first_name: firstName, last_name: lastName, email, password })
-        .then(res => res.data)
-        .catch(error => error.response.data);
+const createUserWithEmailPasswordRequest = async (firstName, lastName, email, password, userType) =>
+    await  Api.createUserAccount({ firstName, lastName, email, password, userType })
+        .then(response => ({ response }))
+        .catch(error => ({ error }))
 
 const signInUserWithEmailPasswordRequest = async (email, password) =>
     await  Api.signInWithEmailAndPassword({ email, password })
-        .then(res => res.data)
-        .catch(error => { throw error.response.data.message });
+        .then(response => ({ response }))
+        .catch(error => ({ error }));
 
 const signOutRequest = async () =>
     await  Api.signOut()
@@ -42,122 +42,30 @@ const signOutRequest = async () =>
 const getAccountInfoRequest = async () =>
     await Api.getAccountInfo()
         .then(res => res.data)
-        .catch(error => { throw error.response.data.message })
+        .catch(error => { throw error.response.data.errors })
 
 function* createUserWithEmailPassword({payload}) {
     console.log('create user saga payload', payload);
-    const {firstName, lastName, email, password} = payload;
-    try {
-        const signUpUser = yield call(createUserWithEmailPasswordRequest, firstName, lastName, email, password);
-        if (signUpUser.message) {
-            yield put(showAuthMessage(signUpUser.message));
-        } else {
-            // localStorage.setItem('user_id', signUpUser._id);
-            yield put(userSignUpSuccess(signUpUser));
-        }
-    } catch (error) {
-        yield put(showAuthMessage(error));
+    const {firstName, lastName, email, password, userType} = payload;
+    const { response, error } = yield call(createUserWithEmailPasswordRequest, firstName, lastName, email, password, userType);
+    if (response) {
+        yield put(showAuthMessage('Successfully created the account! Please verify the email!'));
+    } else {
+        // localStorage.setItem('user', signUpUser._id);
+        // yield put(userSignUpSuccess(signUpUser));
+        // console.log('error', error);
+        yield put(showAuthMessage(error.response.data.errors));
     }
 }
-
-// const signInUserWithGoogleRequest = async () =>
-//     await  auth.signInWithPopup(googleAuthProvider)
-//         .then(authUser => authUser)
-//         .catch(error => error);
-
-// const signInUserWithFacebookRequest = async () =>
-//     await  auth.signInWithPopup(facebookAuthProvider)
-//         .then(authUser => authUser)
-//         .catch(error => error);
-
-// const signInUserWithGithubRequest = async () =>
-//     await  auth.signInWithPopup(githubAuthProvider)
-//         .then(authUser => authUser)
-//         .catch(error => error);
-
-// const signInUserWithTwitterRequest = async () =>
-//     await  auth.signInWithPopup(twitterAuthProvider)
-//         .then(authUser => authUser)
-//         .catch(error => error);
-
-
-// function* signInUserWithGoogle() {
-//     try {
-//         const signUpUser = yield call(signInUserWithGoogleRequest);
-//         if (signUpUser.message) {
-//             yield put(showAuthMessage(signUpUser.message));
-//         } else {
-//             localStorage.setItem('user_id', signUpUser.uid);
-//             yield put(userGoogleSignInSuccess(signUpUser));
-//         }
-//     } catch (error) {
-//         yield put(showAuthMessage(error));
-//     }
-// }
-
-
-// function* signInUserWithFacebook() {
-//     try {
-//         const signUpUser = yield call(signInUserWithFacebookRequest);
-//         if (signUpUser.message) {
-//             yield put(showAuthMessage(signUpUser.message));
-//         } else {
-//             localStorage.setItem('user_id', signUpUser.uid);
-//             yield put(userFacebookSignInSuccess(signUpUser));
-//         }
-//     } catch (error) {
-//         yield put(showAuthMessage(error));
-//     }
-// }
-
-
-// function* signInUserWithGithub() {
-//     try {
-//         const signUpUser = yield call(signInUserWithGithubRequest);
-//         if (signUpUser.message) {
-//             yield put(showAuthMessage(signUpUser.message));
-//         } else {
-//             localStorage.setItem('user_id', signUpUser.uid);
-//             yield put(userGithubSignInSuccess(signUpUser));
-//         }
-//     } catch (error) {
-//         yield put(showAuthMessage(error));
-//     }
-// }
-
-
-// function* signInUserWithTwitter() {
-//     try {
-//         const signUpUser = yield call(signInUserWithTwitterRequest);
-//         if (signUpUser.message) {
-//             if (signUpUser.message.length > 100) {
-//                 yield put(showAuthMessage('Your request has been canceled.'));
-//             } else {
-//                 yield put(showAuthMessage(signUpUser.message));
-//             }
-//         } else {
-//             localStorage.setItem('user_id', signUpUser.uid);
-//             yield put(userTwitterSignInSuccess(signUpUser));
-//         }
-//     } catch (error) {
-//         yield put(showAuthMessage(error));
-//     }
-// }
-
 function* signInUserWithEmailPassword({payload}) {
     const {email, password} = payload;
-    try {
-        const signInUser = yield call(signInUserWithEmailPasswordRequest, email, password);
-        console.log(signInUser);
-        // if (signInUser.message) {
-        //     yield put(showAuthMessage(signInUser.message));
-        // } else {
-            localStorage.setItem('user_id', signInUser);
-            yield put(userSignInSuccess(signInUser));
-        // }
-    } catch (error) {
+    const {response, error} = yield call(signInUserWithEmailPasswordRequest, email, password);
+    if (response) {
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        yield put(userSignInSuccess(response.data.user));
+    } else {
         console.log('SIGNIN', error);
-        yield put(showAuthMessage(error));
+        yield put(showAuthMessage(error.response.data.errors));
     }
 }
 
@@ -178,7 +86,7 @@ function* signOut() {
         if (signInUser.message) {
             yield put(showAuthMessage(signInUser.message));
         } else {
-            localStorage.removeItem('user_id');
+            localStorage.removeItem('user');
             yield put(userSignOutSuccess(signInUser));
         }
     } catch (error) {

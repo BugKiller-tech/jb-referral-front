@@ -18,7 +18,6 @@ export const GET_ACCOUNT_INFO_SUCCESS = 'GET_ACCOUNT_INFO_SUCCESS';
 
 
 
-
 // // Customizer const
 export const TOGGLE_COLLAPSED_NAV = 'toggle_collapse_menu';
 export const DRAWER_TYPE = 'drawer_type';
